@@ -14,6 +14,7 @@ const filterUser = (userID, userList) => {
 };
 
 export const removeUser = (payload) => {
+  console.log(payload);
   const users = filterUser(payload.userID, payload.userList);
   return {
     type: TYPES.REMOVE_USER,
