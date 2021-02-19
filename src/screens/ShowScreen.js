@@ -12,11 +12,13 @@ import {connect} from 'react-redux';
 import * as utils from '../utilities/index';
 import styles from '../styles/login';
 import * as TASKS from '../store/actions';
+import {SearchBar} from 'react-native-elements';
 
 class ShowScreen extends React.Component {
   static navigationOptions = () => ({
     headerShown: false,
   });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +26,11 @@ class ShowScreen extends React.Component {
       username: '',
       password: '',
       stateEmail: '',
+      searchText: '',
+      allUsers: this.props.userList,
     };
   }
+
   setModalVisible = (visible, email, username, password) => {
     this.setState({
       modalVisible: visible,
@@ -34,13 +39,37 @@ class ShowScreen extends React.Component {
       password,
     });
   };
+
   onUpdateUser = (stateEmail, userList, username, password) => {
     this.props.updateUser({stateEmail, userList, username, password});
     this.setState({modalVisible: false});
   };
+
+  onSearch = (searchText, allUsers) => {
+    let searchedUser = allUsers.find((obj) => {
+      if (
+        obj.email.toLowerCase() === searchText.toLowerCase() ||
+        obj.username.toLowerCase() === searchText.toLowerCase()
+      ) {
+        return obj;
+      }
+      this.setState({
+        allUsers: searchedUser,
+      });
+    });
+    return searchedUser;
+  };
+
   render() {
     const {userID, userList, removeUser} = this.props;
-    const {modalVisible, username, password, stateEmail} = this.state;
+    const {
+      modalVisible,
+      username,
+      password,
+      stateEmail,
+      searchText,
+      allUsers,
+    } = this.state;
     const renderItem = ({item, index}) => (
       <View style={styles.listView}>
         <View>
@@ -119,13 +148,46 @@ class ShowScreen extends React.Component {
         </Modal>
       </View>
     );
+
+    const searchFilterFunction = (searchText) => {
+      const {allUsers} = this.state;
+      if (searchText) {
+        const newData = allUsers.filter(function (item) {
+          const itemData = item.username
+            ? item.username.toUpperCase()
+            : ''.toUpperCase();
+          const textData = searchText.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        this.setState({allUsers: newData, searchText});
+      } else {
+        this.setState({allUsers, searchText});
+      }
+    };
+
+    const renderSearch = () => {
+      return (
+        <SearchBar
+          placeholder="Search Here..."
+          round
+          containerStyle={{backgroundColor: utils.COLOR_PURPLE}}
+          style={{color: utils.WHITE}}
+          value={searchText}
+          onChangeText={(searchText) => searchFilterFunction(searchText)}
+          onChangeText={(searchText) => searchFilterFunction(searchText)}
+          onClear={() => this.setState({allUsers: userList})}
+        />
+      );
+    };
+
     return (
       <View style={styles.sectionContainer}>
         <Text style={styles.textHeading}>List of All Users</Text>
         <FlatList
-          data={userList}
+          data={allUsers}
           renderItem={renderItem}
           keyExtractor={(item, index) => index}
+          ListHeaderComponent={renderSearch}
         />
       </View>
     );
