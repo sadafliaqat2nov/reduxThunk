@@ -8,23 +8,22 @@ export const addNewUser = (payload) => {
   };
 };
 
-const filterUser = (userID, userList) => {
-  const newUsers = userList.filter((user) => user.userID !== userID);
+const filterUser = (userEmail, userList) => {
+  const newUsers = userList.filter((user) => user.email !== userEmail);
   return newUsers;
 };
 
 export const removeUser = (payload) => {
-  console.log(payload);
-  const users = filterUser(payload.userID, payload.userList);
+  const users = filterUser(payload.userEmail, payload.userList);
   return {
     type: TYPES.REMOVE_USER,
     payload: users,
   };
 };
 
-const updateUserInfo = (userID, userList, username, password) => {
+const updateUserInfo = (stateEmail, userList, username, password) => {
   const userInfo = userList.map((user) => {
-    if (user.userID === userID) {
+    if (user.email === stateEmail) {
       (user.username = username) && (user.password = password);
     }
     console.log(user);
@@ -35,7 +34,7 @@ const updateUserInfo = (userID, userList, username, password) => {
 
 export const updateUser = (payload) => {
   const userUpdatedinfo = updateUserInfo(
-    payload.userID,
+    payload.stateEmail,
     payload.userList,
     payload.username,
     payload.password,
