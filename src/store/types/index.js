@@ -1,0 +1,11 @@
+export const ADD_USER = 'ADD_USER';
+export const LOGIN = 'LOGIN';
+export const REMOVE_USER = 'REMOVE_USER';
+export const EDIT_USER = 'EDIT_USER';
+export const SIGNUP = 'SIGNUP';
+export const CURRENT_USER = 'CURRENT_USER';
+export const LOGOUT = 'LOGOUT';
+export const GET_API_DATA = 'GET_API_DATA';
+export const SHOW_LOADER = 'SHOW_LOADER';
+export const HIDE_LOADER = 'HIDE_LOADER';
+export const UPDATE_USER = 'UPDATE_USER';
