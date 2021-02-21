@@ -9,3 +9,6 @@ export const GET_API_DATA = 'GET_API_DATA';
 export const SHOW_LOADER = 'SHOW_LOADER';
 export const HIDE_LOADER = 'HIDE_LOADER';
 export const UPDATE_USER = 'UPDATE_USER';
+export const ADD_PRODUCT = 'ADD_PRODUCT';
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
+export const UPDATE_QTY = 'UPDATE_QTY';

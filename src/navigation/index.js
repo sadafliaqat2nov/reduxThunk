@@ -7,6 +7,7 @@ import Home from '../screens/HomeScreen';
 import Show from '../screens/ShowScreen';
 import API from '../screens/APIScreen';
 import Profile from '../screens/ProfileScreen';
+import AddToCart from '../screens/AddToCart';
 const loginStack = createStackNavigator({
   Login,
   Signup,
@@ -27,6 +28,9 @@ const MainTab = createBottomTabNavigator({
   },
   Response: {
     screen: API,
+  },
+  AddToCart: {
+    screen: AddToCart,
   },
   Profile: {
     screen: Profile,

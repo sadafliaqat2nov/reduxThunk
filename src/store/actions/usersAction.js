@@ -33,7 +33,7 @@ const updateUserInfo = (stateEmail, userList, username, password) => {
 };
 
 export const updateUser = (payload) => {
-  const userUpdatedinfo = updateUserInfo(
+  const userUpdatedInfo = updateUserInfo(
     payload.stateEmail,
     payload.userList,
     payload.username,
@@ -41,6 +41,6 @@ export const updateUser = (payload) => {
   );
   return {
     type: TYPES.UPDATE_USER,
-    payload: userUpdatedinfo,
+    payload: userUpdatedInfo,
   };
 };

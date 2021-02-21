@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: utils.COLOR_PURPLE,
     borderWidth: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     borderRadius: 5,
     marginBottom: 10,
   },
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 10,
-    width: '70%',
+    width: '80%',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 20,
