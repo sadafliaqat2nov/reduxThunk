@@ -6,10 +6,18 @@ import * as utils from '../utilities/index';
 import styles from '../styles/login';
 import * as TASKS from '../store/actions';
 import {Avatar} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class APIScreen extends React.Component {
   static navigationOptions = () => ({
     headerShown: false,
+    tabBarIcon: () => {
+      return <Icon name="account-group" color={utils.COLOR_PURPLE} size={30} />;
+    },
+    tabBarOptions: {
+      activeTintColor: utils.COLOR_PURPLE,
+      inactiveTintColor: utils.COLOR_LIGHT_PURPLE,
+    },
   });
   constructor(props) {
     super(props);
@@ -24,14 +32,10 @@ class APIScreen extends React.Component {
       <View style={styles.listView}>
         <Avatar.Image size={35} source={{uri: item.avatar}} />
         <View>
-          <Text
-            style={[styles.text, {color: utils.BLACK, textAlign: 'right'}]}
-            key={index}>
+          <Text style={[styles.text, {color: utils.BLACK, textAlign: 'right'}]}>
             {item.first_name} {item.last_name}
           </Text>
-          <Text style={[styles.text, {color: utils.BLACK}]} key={index}>
-            {item.email}
-          </Text>
+          <Text style={[styles.text, {color: utils.BLACK}]}>{item.email}</Text>
         </View>
       </View>
     );

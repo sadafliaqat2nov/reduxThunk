@@ -7,16 +7,23 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-// import {Avatar} from 'react-native-elements';
 import {connect} from 'react-redux';
 import * as utils from '../utilities/index';
 import styles from '../styles/login';
 import * as TASKS from '../store/actions';
 import {SearchBar} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class ShowScreen extends React.Component {
   static navigationOptions = () => ({
     headerShown: false,
+    tabBarIcon: () => {
+      return <Icon name="account-cog" color={utils.COLOR_PURPLE} size={30} />;
+    },
+    tabBarOptions: {
+      activeTintColor: utils.COLOR_PURPLE,
+      inactiveTintColor: utils.COLOR_LIGHT_PURPLE,
+    },
   });
 
   constructor(props) {
@@ -45,23 +52,39 @@ class ShowScreen extends React.Component {
     this.setState({modalVisible: false});
   };
 
-  onSearch = (searchText, allUsers) => {
-    let searchedUser = allUsers.find((obj) => {
-      if (
-        obj.email.toLowerCase() === searchText.toLowerCase() ||
-        obj.username.toLowerCase() === searchText.toLowerCase()
-      ) {
-        return obj;
-      }
-      this.setState({
-        allUsers: searchedUser,
-      });
-    });
-    return searchedUser;
+  // onSearch = (searchText, allUsers) => {
+  //   let searchedUser = allUsers.find((obj) => {
+  //     if (
+  //       obj.email.toLowerCase() === searchText.toLowerCase() ||
+  //       obj.username.toLowerCase() === searchText.toLowerCase()
+  //     ) {
+  //       return obj;
+  //     }
+  //     this.setState({
+  //       allUsers: searchedUser,
+  //     });
+  //   });
+  //   return searchedUser;
+  // };
+
+  _searchTextInputChanged = async (text) => {
+    const {allUsers} = this.state;
+    this.setState({searchText: text});
+    const newData = await allUsers.filter(
+      (user) =>
+        user.username.toLowerCase() === text.toLowerCase() ||
+        user.email.toLowerCase() === text.toLowerCase(),
+    );
+    //change your logic as per your requirement
+    if (newData.length > 0) {
+      this.setState({allUsers: newData});
+    } else {
+      this.setState({allUsers: this.props.userList});
+    }
   };
 
   render() {
-    const {userID, userList, removeUser} = this.props;
+    const {userList, removeUser} = this.props;
     const {
       modalVisible,
       username,
@@ -73,14 +96,12 @@ class ShowScreen extends React.Component {
     const renderItem = ({item, index}) => (
       <View style={styles.listView}>
         <View>
-          <Text style={[styles.text, {color: utils.BLACK}]} key={index}>
+          <Text style={[styles.text, {color: utils.BLACK}]}>
             {item.username}
           </Text>
-          <Text style={[styles.text, {color: utils.BLACK}]} key={index}>
-            {item.email}
-          </Text>
+          <Text style={[styles.text, {color: utils.BLACK}]}>{item.email}</Text>
         </View>
-        <View key={index} style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() =>
               this.setModalVisible(
@@ -96,7 +117,6 @@ class ShowScreen extends React.Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            key={index}
             onPress={() => removeUser({userEmail: item.email, userList})}>
             <View style={[styles.button, {paddingHorizontal: 5}]}>
               <Text style={styles.text}>Remove</Text>
@@ -151,6 +171,7 @@ class ShowScreen extends React.Component {
 
     const searchFilterFunction = (searchText) => {
       const {allUsers} = this.state;
+      this.setState({searchText});
       if (searchText) {
         const newData = allUsers.filter(function (item) {
           const itemData = item.username
@@ -159,9 +180,12 @@ class ShowScreen extends React.Component {
           const textData = searchText.toUpperCase();
           return itemData.indexOf(textData) > -1;
         });
-        this.setState({allUsers: newData, searchText});
-      } else {
-        this.setState({allUsers, searchText});
+        this.setState({allUsers: newData});
+        if (searchText === '') {
+          this.setState({allUsers});
+        }
+      } else if (this.state.searchText == null) {
+        this.setState({allUsers});
       }
     };
 
@@ -170,10 +194,16 @@ class ShowScreen extends React.Component {
         <SearchBar
           placeholder="Search Here..."
           round
-          containerStyle={{backgroundColor: utils.COLOR_PURPLE}}
-          style={{color: utils.WHITE}}
+          returnKeyType="search"
+          containerStyle={{
+            backgroundColor: utils.WHITE,
+          }}
+          autoFocus={true}
+          placeholderTextColor={utils.BLACK}
+          color={utils.BLACK}
+          inputContainerStyle={styles.searchContainer}
           value={searchText}
-          onChangeText={(searchText) => searchFilterFunction(searchText)}
+          clearButtonMode="none"
           onChangeText={(searchText) => searchFilterFunction(searchText)}
           onClear={() => this.setState({allUsers: userList})}
         />

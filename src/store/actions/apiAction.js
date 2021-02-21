@@ -8,7 +8,7 @@ export const getAPIData = () => {
     axios
       .get('https://reqres.in/api/users?page=1')
       .then((response) => {
-        dispatch(getAPISucc(response.data.data));
+        dispatch(getAPISuccess(response.data.data));
         dispatch(TASKS.hideLoader());
       })
       .catch((error) => {
@@ -18,7 +18,7 @@ export const getAPIData = () => {
   };
 };
 
-const getAPISucc = (payload) => {
+const getAPISuccess = (payload) => {
   return {
     type: TYPES.GET_API_DATA,
     payload,

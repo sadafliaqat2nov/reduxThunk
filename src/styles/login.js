@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    height: 30,
+    height: 35,
     marginBottom: 5,
   },
   tinyLogo: {
@@ -51,7 +51,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 2,
     paddingHorizontal: 5,
-    fontSize: 11,
+    fontSize: 12,
+  },
+  searchContainer: {
+    backgroundColor: utils.WHITE,
+    borderBottomWidth: 2,
+    height: 50,
+    borderColor: utils.COLOR_PURPLE,
+    borderWidth: 2,
   },
   textHeading: {
     margin: 25,
