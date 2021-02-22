@@ -30,7 +30,7 @@ class ProfileScreen extends React.Component {
   render() {
     const {currentUser} = this.props;
     return (
-      <View style={styles.sectionContainer}>
+      <View style={[styles.sectionContainer, {justifyContent: 'center'}]}>
         <View style={stylesProfile.avatar}>
           <Avatar.Image
             size={120}

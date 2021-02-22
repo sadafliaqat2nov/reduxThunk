@@ -1,6 +1,7 @@
 import * as TYPES from '../types';
 const initialState = {
   products: [],
+  cartProducts: [],
 };
 export default (state = initialState, actions) => {
   switch (actions.type) {
@@ -8,6 +9,16 @@ export default (state = initialState, actions) => {
       return {
         ...state,
         products: actions.payload,
+      };
+    case TYPES.ADD_TO_CART:
+      return {
+        ...state,
+        cartProducts: actions.payload,
+      };
+    case TYPES.REMOVE_FROM_CART:
+      return {
+        ...state,
+        cartProducts: actions.payload,
       };
     case TYPES.REMOVE_PRODUCT:
       return {

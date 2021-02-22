@@ -49,7 +49,7 @@ class SignupScreen extends React.Component {
   render() {
     const {username, email, password} = this.state;
     return (
-      <View style={styles.sectionContainer}>
+      <View style={[styles.sectionContainer, {justifyContent: 'center'}]}>
         <Image
           style={styles.tinyLogo}
           source={{uri: 'https://cdn.auth0.com/blog/react-redux/logo.png'}}

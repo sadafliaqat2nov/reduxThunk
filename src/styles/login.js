@@ -5,9 +5,8 @@ const styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
     backgroundColor: utils.WHITE,
-    justifyContent: 'center',
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingTop: 35,
   },
   button: {
     backgroundColor: utils.COLOR_PURPLE,
@@ -41,7 +40,6 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
     borderRadius: 10,
-    height: 55,
     borderColor: utils.COLOR_PURPLE,
     borderWidth: 2,
     backgroundColor: utils.WHITE,

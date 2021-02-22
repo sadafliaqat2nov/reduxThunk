@@ -189,8 +189,28 @@ class ShowScreen extends React.Component {
       }
     };
 
+    //     const searchStore = (value) => {
+    //       // const {setStores, stores} = this.props;
+    //       const {allUsers} = this.state;
+    //       const searchedStores = allUsers.filter((item) => {
+    //         const itemData = `${item.username.toUpperCase()}
+    // ${item.email.toUpperCase()} ${item.username.toUpperCase()}`;
+    //         const textData = value.toUpperCase();
+    //         return itemData.indexOf(textData) > -1;
+    //       });
+    //       setStores({
+    //         allStores: stores.allStores,
+    //         activeStores: searchedStores,
+    //       });
+    //     };
+
     const renderSearch = () => {
       return (
+        // <TextInput
+        //   style={styles.textInput}
+        //   placeholder={`Search ${title}`}
+        //   onChangeText={(value) => searchStore(value)}
+        // />
         <SearchBar
           placeholder="Search Here..."
           round

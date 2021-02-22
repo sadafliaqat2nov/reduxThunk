@@ -1,9 +1,23 @@
 import * as TYPES from '../types';
 
-export const addNewProduct = (payload) => {
+export const addNewProduct = (productsArray) => {
   return {
     type: TYPES.ADD_PRODUCT,
-    payload: payload.product,
+    payload: productsArray,
+  };
+};
+
+export const addToCartMethod = (cartArray) => {
+  return {
+    type: TYPES.ADD_TO_CART,
+    payload: cartArray,
+  };
+};
+
+export const removeFromCart = (cartRestArray) => {
+  return {
+    type: TYPES.REMOVE_FROM_CART,
+    payload: cartRestArray,
   };
 };
 

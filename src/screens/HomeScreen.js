@@ -7,12 +7,14 @@ import {
   Image,
   FlatList,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import {connect} from 'react-redux';
 import * as utils from '../utilities/index';
 import styles from '../styles/login';
 import * as TASKS from '../store/actions';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import uuid from 'react-uuid';
 
 class HomeScreen extends React.Component {
   static navigationOptions = () => ({
@@ -33,6 +35,7 @@ class HomeScreen extends React.Component {
       product_price: '',
       quantity: '',
       modalVisible: false,
+      getAllProducts: this.props.productList,
     };
   }
 
@@ -49,35 +52,92 @@ class HomeScreen extends React.Component {
     if (product_name == '' || product_price == '' || quantity == '') {
       alert('Please enter product info');
     } else {
-      let product = {name, price, qty};
-      addNewProduct({productsArray});
+      let product = {name, price, qty, key: uuid()};
       productsArray.push(product);
+      addNewProduct(productsArray);
       alert('Product has been created');
       this.setState({
         modalVisible: false,
         product_name: '',
         product_price: '',
         quantity: '',
-        allProducts: productList,
       });
     }
   };
+
+  requestForAddToCart = (product_ID) => {
+    const {addToCartMethod, cartItems} = this.props;
+    const {getAllProducts} = this.state;
+    let cartArray = [...cartItems];
+    let addedProduct = getAllProducts.find((product) => {
+      if (product.key == product_ID) {
+        return true;
+      }
+    });
+    if (addedProduct) {
+      cartArray.push(addedProduct);
+      addToCartMethod(cartArray);
+      alert('Product added in cart');
+    } else {
+      alert('Product failed to add in cart');
+    }
+  };
+
   render() {
     const {modalVisible, product_name, product_price, quantity} = this.state;
-    const {productList} = this.props;
+    const {productList, productID} = this.props;
     const renderItem = ({item, index}) => (
-      <View style={styles.listView}>
-        <View>
-          <Text style={[styles.text, {color: utils.BLACK, textAlign: 'right'}]}>
-            {item.name}
-          </Text>
-          <Text style={[styles.text, {color: utils.BLACK}]}>{item.price}</Text>
+      <View
+        style={[
+          styles.listView,
+          {flexDirection: 'column', backgroundColor: utils.COLOR_LIGHT_PURPLE},
+        ]}>
+        <View
+          style={[
+            styles.listView,
+            {
+              borderWidth: 0,
+              backgroundColor: utils.COLOR_LIGHT_PURPLE,
+            },
+          ]}>
+          <View>
+            <Text
+              style={[styles.text, {color: utils.BLACK, textAlign: 'right'}]}>
+              Name: {item.name}
+            </Text>
+            <Text style={[styles.text, {color: utils.BLACK}]}>
+              Price: {item.price}
+            </Text>
+          </View>
+          <View>
+            <Text style={[styles.text, {color: utils.BLACK}]}>
+              Quantity: {item.qty}
+            </Text>
+            {/* <Text style={[styles.text, {color: utils.BLACK}]}>
+              Product ID: {item.key}
+            </Text> */}
+          </View>
         </View>
-        <Text style={[styles.text, {color: utils.BLACK}]}>{item.qty}</Text>
+        <View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.button}
+            onPress={() => this.requestForAddToCart(item.key)}>
+            <Text style={[styles.textHeading, {color: utils.WHITE}]}>
+              Add To Cart{' '}
+              <Icon
+                name="cart-plus"
+                size={22}
+                color={utils.COLOR_LIGHT_PURPLE}
+              />
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
     return (
       <View style={styles.sectionContainer}>
+        <Text style={styles.textHeading}>All Products</Text>
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.button}
@@ -139,20 +199,11 @@ class HomeScreen extends React.Component {
             </View>
           </View>
         </Modal>
-        <View>
-          <FlatList
-            data={productList}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => item.id}
-          />
-        </View>
-        {/* <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => utils.navigate('Show')}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Show All Accounts</Text>
-          </View>
-        </TouchableOpacity> */}
+        <FlatList
+          data={productList}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.id}
+        />
       </View>
     );
   }
@@ -161,12 +212,15 @@ class HomeScreen extends React.Component {
 const mapStateToProps = (state) => {
   return {
     productList: state.productReducer.products,
+    productID: state.productReducer.productID,
+    cartItems: state.productReducer.cartProducts,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     addNewProduct: (params) => dispatch(TASKS.addNewProduct(params)),
+    addToCartMethod: (params) => dispatch(TASKS.addToCartMethod(params)),
   };
 };
 
