@@ -3,14 +3,28 @@ import {View, Text, TouchableOpacity, ScrollView, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import * as utils from '../utilities/index';
 import styles from '../styles/login';
+import stylesCart from '../styles/cart';
 import * as TASKS from '../store/actions';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 class AddToCartScreen extends React.Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({navigation}) => ({
     headerShown: false,
     tabBarIcon: () => {
-      return <Icon name="opencart" color={utils.COLOR_PURPLE} size={25} />;
+      const cartItemsCount = navigation.getParam('cartCount');
+      return cartItemsCount > 0 ? (
+        <View style={{flexDirection: 'row'}}>
+          <Icon name="opencart" color={utils.COLOR_PURPLE} size={20} />
+          <View style={stylesCart.customIcon}>
+            <Text
+              style={[styles.text, {padding: 2, color: utils.COLOR_PURPLE}]}>
+              {cartItemsCount}
+            </Text>
+          </View>
+        </View>
+      ) : (
+        <Icon name="opencart" color={utils.COLOR_PURPLE} size={30} />
+      );
     },
     tabBarOptions: {
       activeTintColor: utils.COLOR_PURPLE,
@@ -18,9 +32,15 @@ class AddToCartScreen extends React.Component {
     },
   });
 
-  constructor(props) {
-    super(props);
-  }
+  componentDidMount = () => {
+    this.props.navigation.setParams({cartCount: this.props.cartCount});
+  };
+
+  componentDidUpdate = () => {
+    if (this.props.cartCount != this.props.navigation.getParam('cartCount')) {
+      this.props.navigation.setParams({cartCount: this.props.cartCount});
+    }
+  };
 
   removeFromCartRequest = (key) => {
     const {removeFromCart, cartItems} = this.props;
@@ -38,7 +58,7 @@ class AddToCartScreen extends React.Component {
   };
 
   render() {
-    const {cartItems} = this.props;
+    const {cartItems, cartCount} = this.props;
     const renderItem = ({item, index}) => (
       <View
         style={[
@@ -63,12 +83,28 @@ class AddToCartScreen extends React.Component {
             </Text>
           </View>
           <View>
-            <Text style={[styles.text, {color: utils.BLACK}]}>
-              Quantity: {item.qty}
-            </Text>
-            <Text style={[styles.text, {color: utils.BLACK}]}>
-              Product ID: {item.key}
-            </Text>
+            <Text style={[styles.text, {color: utils.BLACK}]}>Quantity: </Text>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity>
+                <Icon
+                  name="minus-square"
+                  size={18}
+                  marginRight={5}
+                  color={utils.COLOR_PURPLE}
+                />
+              </TouchableOpacity>
+              <Text style={[styles.text, {color: utils.BLACK}]}>
+                {item.qty}
+              </Text>
+              <TouchableOpacity>
+                <Icon
+                  marginLeft={5}
+                  name="plus-square"
+                  size={18}
+                  color={utils.COLOR_PURPLE}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <View>
@@ -104,6 +140,7 @@ const mapStateToProps = (state) => {
     userList: state.usersReducer.users,
     productList: state.productReducer.products,
     cartItems: state.productReducer.cartProducts,
+    cartCount: state.productReducer.cartProducts.length,
   };
 };
 

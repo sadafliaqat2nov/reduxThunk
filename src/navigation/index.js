@@ -13,24 +13,23 @@ const loginStack = createStackNavigator({
   Signup,
 });
 // Add all screens for Home Stack
-// const homeStack = createStackNavigator({
-//   Home,
-//   Show,
-//   API,
-// });
+const homeStack = createStackNavigator({
+  Home,
+  AddToCart,
+});
 
 const MainTab = createBottomTabNavigator({
   Home: {
     screen: Home,
   },
-  Show: {
+  Cart: {
+    screen: AddToCart,
+  },
+  Users: {
     screen: Show,
   },
   Response: {
     screen: API,
-  },
-  AddToCart: {
-    screen: AddToCart,
   },
   Profile: {
     screen: Profile,
