@@ -32,6 +32,13 @@ class AddToCartScreen extends React.Component {
     },
   });
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      quantity: 1,
+    };
+  }
+
   componentDidMount = () => {
     this.props.navigation.setParams({cartCount: this.props.cartCount});
   };
@@ -57,8 +64,31 @@ class AddToCartScreen extends React.Component {
     }
   };
 
+  leastQty = (quant) => {
+    if (quant > 1) {
+      let qty = quant - 1;
+      this.setState({
+        quantity: qty,
+      });
+    } else {
+      alert("quantity can't reduce anymore");
+    }
+  };
+
+  maxQty = (quant, total) => {
+    if (quant < total) {
+      let qty = quant + 1;
+      this.setState({
+        quantity: qty,
+      });
+    } else {
+      alert(total + ' products are available in store');
+    }
+  };
+
   render() {
     const {cartItems, cartCount} = this.props;
+    const {quantity} = this.state;
     const renderItem = ({item, index}) => (
       <View
         style={[
@@ -74,8 +104,7 @@ class AddToCartScreen extends React.Component {
             },
           ]}>
           <View>
-            <Text
-              style={[styles.text, {color: utils.BLACK, textAlign: 'right'}]}>
+            <Text style={[styles.text, {color: utils.BLACK}]}>
               Name: {item.name}
             </Text>
             <Text style={[styles.text, {color: utils.BLACK}]}>
@@ -83,27 +112,50 @@ class AddToCartScreen extends React.Component {
             </Text>
           </View>
           <View>
-            <Text style={[styles.text, {color: utils.BLACK}]}>Quantity: </Text>
+            <Text style={[styles.text, {color: utils.BLACK}]}>Quantity</Text>
             <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity>
+              {quantity > 1 ? (
+                <TouchableOpacity onPress={() => this.leastQty(quantity)}>
+                  <Icon
+                    name="minus-square"
+                    color={utils.COLOR_PURPLE}
+                    size={25}
+                    marginRight={5}
+                  />
+                </TouchableOpacity>
+              ) : (
                 <Icon
                   name="minus-square"
-                  size={18}
+                  size={25}
                   marginRight={5}
-                  color={utils.COLOR_PURPLE}
+                  color={utils.DISABLE_COLOR_PURPLE}
                 />
-              </TouchableOpacity>
-              <Text style={[styles.text, {color: utils.BLACK}]}>
-                {item.qty}
+              )}
+              <Text
+                style={[
+                  styles.text,
+                  {color: utils.BLACK, fontSize: 16, marginRight: 5},
+                ]}>
+                {quantity}
               </Text>
-              <TouchableOpacity>
+              {quantity < item.qty ? (
+                <TouchableOpacity
+                  onPress={() => this.maxQty(quantity, item.qty)}>
+                  <Icon
+                    marginLeft={5}
+                    name="plus-square"
+                    size={25}
+                    color={utils.COLOR_PURPLE}
+                  />
+                </TouchableOpacity>
+              ) : (
                 <Icon
                   marginLeft={5}
                   name="plus-square"
-                  size={18}
-                  color={utils.COLOR_PURPLE}
+                  size={25}
+                  color={utils.DISABLE_COLOR_PURPLE}
                 />
-              </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

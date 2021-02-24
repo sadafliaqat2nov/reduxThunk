@@ -101,8 +101,7 @@ class HomeScreen extends React.Component {
             },
           ]}>
           <View>
-            <Text
-              style={[styles.text, {color: utils.BLACK, textAlign: 'right'}]}>
+            <Text style={[styles.text, {color: utils.BLACK}]}>
               Name: {item.name}
             </Text>
             <Text style={[styles.text, {color: utils.BLACK}]}>

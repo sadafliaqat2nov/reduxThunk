@@ -5,6 +5,7 @@ export const COLOR_PURPLE = '#642C75';
 export const COLOR_LIGHT_PURPLE = '#CFB1C8';
 export const COLOR_GREY = '#676767';
 export const PLACEHOLDER_COLOR = 'grey';
+export const DISABLE_COLOR_PURPLE = '#905883';
 export const BLACK = '#000';
 export const WHITE = '#F8F7F6';
 export const validateEmail = (email) => {
